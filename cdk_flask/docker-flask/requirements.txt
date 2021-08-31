@@ -1,0 +1,12 @@
+web3
+boto3
+werkzeug
+opencv-python
+simplejson
+flask-table
+Flask-Script
+psycopg2
+Flask-SQLAlchemy
+Flask-Migrate
+sqlalchemy_utils
+flask-s3

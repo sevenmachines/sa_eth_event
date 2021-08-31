@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Video parser</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="static/css/bootstrap.min.css" rel="stylesheet">
+        <style>body {margin-top: 40px; background-color: #333;}</style>
+        <link href="static/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="hero-unit">
+                <h1>{{ name }}</h1>
+                <h2>Congratulations</h2>
+                <p>Your Flask application is accessing accessing bucket <b>{{bucket_name}}</b></p>
+                <!DOCTYPE html>
+    <div class="content">
+        <div>
+          <form method="POST" action="/upload" enctype=multipart/form-data>
+            <input type=file name=file>
+            <input type=submit value=Upload>
+          </form>
+        </div>
+        <div>
+          <h3>These are your uploaded files:</h3>
+          <table>
+            <TR>
+                <TD class="c1"><h5>Filename</h5></TD>
+                <TD class="c2"><h5>Resolution</h5></TD>
+                <TD class="c3"><h5>FPS</h5></TD>
+            </TR>
+            {% for item in contents %}
+            <TR>
+                <TD class="c1"> {{item.filename}} </TD>
+                <TD class="c2"> {{item.width}}x{{ item.height }} </TD>
+                <TD class="c3"><SPAN> {{item.fps}} </SPAN></TD>
+            </TR>
+            {% endfor %}
+        </table>
+
+        </div>
+    </div>
+                

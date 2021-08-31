@@ -1,0 +1,11 @@
+aws-cdk.core
+aws-cdk.aws_ec2
+aws-cdk.aws_ecs
+aws-cdk.aws_ecs_patterns
+aws_cdk.aws_s3 
+aws_cdk.aws_iam 
+aws_cdk.aws_rds 
+aws_cdk.aws_lambda 
+aws_cdk.aws_dynamodb 
+aws_cdk.aws_s3_notifications
+aws-cdk.aws-elasticloadbalancingv2
