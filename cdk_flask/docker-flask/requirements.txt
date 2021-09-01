@@ -10,3 +10,5 @@ Flask-SQLAlchemy
 Flask-Migrate
 sqlalchemy_utils
 flask-s3
+requests
+requests

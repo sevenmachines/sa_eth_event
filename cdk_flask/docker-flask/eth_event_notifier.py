@@ -29,8 +29,8 @@ class EthereumNotifier():
     def _setup_provider(self, event_name):
         print('Setting up filters...')
         self.contract = self.w3.eth.contract(address=self.contract_address, abi=self.contract_abi)
-        #self.event_filter = self.w3.eth.filter({"address": self.contract_address})
-        self.block_filter = self.w3.eth.filter('latest')
+        self.event_filter = self.contract.events[event_name].createFilter(fromBlock='latest')
+        #self.block_filter = self.w3.eth.filter('latest')
         #self.transaction_filter = self.w3.eth.filter('pending')
     
     def _get_abi_from_contract_address(self, contract_address):
@@ -45,7 +45,7 @@ class EthereumNotifier():
         print(event_name)
         
     def handle_event(self, event):
-        print(self.parse_event(event))
+        print(event)
 
     async def log_loop(self, event_filter, poll_interval):
         while True:
@@ -63,7 +63,7 @@ class EthereumNotifier():
         try:
             loop.run_until_complete(
                 asyncio.gather(
-                    self.log_loop(self.block_filter , 2)
+                    self.log_loop(self.event_filter , 2)
             ))
         finally:
             loop.close()
