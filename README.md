@@ -1,10 +1,22 @@
 
 # Relaying Ethereum contract events into AWS using Fargate and EventBridge
 
-![Architecture](architecture.jpg)
-  
+This post demonstrates how to relay events on contracts in the Ethereum public blockchain into the AWS environment. This enables traditional applications in the cloud to integrate closely with the public blockchain and react to changes. The solution is fully serverless, utilising AWS Fargate services to monitor each contract, and AWS Eventbridge as the event bus to distribute events to interested services and applications within the AWS cloud. The solution is deployed with the AWS Cloud Development Kit (AWS CDK).
 
-## Introduction
+## Overview
+
+The contract event application is a stateless container that uses one contract address per service.
+
+![Architecture](architecture.jpg)
+
+In this architecture:
+
+1. A Fargate service for each contract address polls the Ethereum network for new events.
+2. Each new event is parsed using the contracts ABI, retrieved from Etherscan 
+3. The parsed JSON contract events are put into the AWS EventBridge bus
+4. The events are sent to the demonstration targets of an SNS topic and Cloudwatch logs
+
+## Deploying the solution with the AWS CDK
 
 The CDK application app.py will create the cloud stack and fargate services to poll
 ethereum contract events. Connection to the ethereum network is made through a 
@@ -15,7 +27,11 @@ see https://blog.infura.io/getting-started-with-infura-28e41844cc89/
 Events are monitored for the NFT contracts CryptoPunks, MeeBits,
 and MutantApeYachtClub.
 
-## Walkthrough
+## Understanding the stack
+
+## Cleaning Up
+
+## Conclusion
 
 ## Appendix
 
