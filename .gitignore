@@ -4,4 +4,4 @@
 build
 dist
 .idea
-cdk_flask/cdk.out
+cdk.out

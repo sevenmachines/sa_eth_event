@@ -6,7 +6,6 @@ import requests
 from web3 import Web3
 import asyncio
 import logging
-from pythonjsonlogger import jsonlogger
 
 class EthereumContractNotifier():
 
@@ -24,18 +23,13 @@ class EthereumContractNotifier():
         self._setup_filters()
         self._setup_event_bus()
         
-        self.logger.info('contract_address:{}'.format(self.contract_address))
-        self.logger.info('node_url:{}'.format(self.node_url))
-        self.logger.info('is_connected:{}'.format(self.w3.isConnected()))
-        self.logger.info('event_names:{}'.format(list(self.event_filters.keys())))
+        logging.info('contract_address:{}'.format(self.contract_address))
+        logging.info('node_url:{}'.format(self.node_url))
+        logging.info('is_connected:{}'.format(self.w3.isConnected()))
+        logging.info('event_names:{}'.format(list(self.event_filters.keys())))
 
     def _setup_logging(self):
         logging.basicConfig(level=logging.INFO)
-        logHandler = logging.StreamHandler()
-        formatter = jsonlogger.JsonFormatter()
-        logHandler.setFormatter(formatter)
-        self.logger = logging.getLogger()
-        self.logger.addHandler(logHandler)
 
     def _setup_connection(self):
         self.w3 = Web3(Web3.HTTPProvider(self.node_url))

@@ -825,7 +825,7 @@
                   {
                     "Ref": "AWS::URLSuffix"
                   },
-                  "/aws-cdk/assets:f5e7b5a9b4c61db2841cdcdfe5795403ce2d33eda06b8782f1dc864e65f1781f"
+                  "/aws-cdk/assets:41f96b9e4b1cd50f9e04c619357ea3656e41a12ae8fa195e339c75d12605af72"
                 ]
               ]
             },
@@ -1021,6 +1021,840 @@
       },
       "Metadata": {
         "aws:cdk:path": "app/CryptoPunksService/SecurityGroup/Resource"
+      }
+    },
+    "MeeBitsTaskDefinitionTaskRoleA489FA71": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsTaskDefinition/TaskRole/Resource"
+      }
+    },
+    "MeeBitsTaskDefinitionTaskRoleDefaultPolicy11042855": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EventBus7B8748AA",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "MeeBitsTaskDefinitionTaskRoleDefaultPolicy11042855",
+        "Roles": [
+          {
+            "Ref": "MeeBitsTaskDefinitionTaskRoleA489FA71"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsTaskDefinition/TaskRole/DefaultPolicy/Resource"
+      }
+    },
+    "MeeBitsTaskDefinition1F05627C": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "NODE_URL",
+                "Value": "https://mainnet.infura.io/v3/33036dd577fa4493a03d2d3ab1098676"
+              },
+              {
+                "Name": "CONTRACT_ADDRESS",
+                "Value": "0x7Bd29408f11D2bFC23c34f18275bBf23bB716Bc7"
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/aws-cdk/assets:41f96b9e4b1cd50f9e04c619357ea3656e41a12ae8fa195e339c75d12605af72"
+                ]
+              ]
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "MeeBitsTaskDefinitionMeeBitsContainerLogGroup038456EF"
+                },
+                "awslogs-stream-prefix": "MeeBitsEthereumContractEvents",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "mode": "non-blocking"
+              }
+            },
+            "Name": "MeeBitsContainer"
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "MeeBitsTaskDefinitionExecutionRole5B6F9965",
+            "Arn"
+          ]
+        },
+        "Family": "appMeeBitsTaskDefinitionCE6859CD",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "MeeBitsTaskDefinitionTaskRoleA489FA71",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsTaskDefinition/Resource"
+      }
+    },
+    "MeeBitsTaskDefinitionMeeBitsContainerLogGroup038456EF": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsTaskDefinition/MeeBitsContainer/LogGroup/Resource"
+      }
+    },
+    "MeeBitsTaskDefinitionExecutionRole5B6F9965": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsTaskDefinition/ExecutionRole/Resource"
+      }
+    },
+    "MeeBitsTaskDefinitionExecutionRoleDefaultPolicy2F8C2A99": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":repository/aws-cdk/assets"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "MeeBitsTaskDefinitionMeeBitsContainerLogGroup038456EF",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "MeeBitsTaskDefinitionExecutionRoleDefaultPolicy2F8C2A99",
+        "Roles": [
+          {
+            "Ref": "MeeBitsTaskDefinitionExecutionRole5B6F9965"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsTaskDefinition/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "MeeBitsService4157D380": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "MeeBitsServiceSecurityGroupEF5E4190",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet1Subnet1E5C3FAC"
+              },
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet2Subnet2B777372"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "MeeBitsTaskDefinition1F05627C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsService/Service"
+      }
+    },
+    "MeeBitsServiceSecurityGroupEF5E4190": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "app/MeeBitsService/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MeeBitsService/SecurityGroup/Resource"
+      }
+    },
+    "EtherScanTaskDefinitionTaskRoleE2985F19": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanTaskDefinition/TaskRole/Resource"
+      }
+    },
+    "EtherScanTaskDefinitionTaskRoleDefaultPolicyC85A6B10": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EventBus7B8748AA",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "EtherScanTaskDefinitionTaskRoleDefaultPolicyC85A6B10",
+        "Roles": [
+          {
+            "Ref": "EtherScanTaskDefinitionTaskRoleE2985F19"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanTaskDefinition/TaskRole/DefaultPolicy/Resource"
+      }
+    },
+    "EtherScanTaskDefinition2CAB59E0": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "NODE_URL",
+                "Value": "https://mainnet.infura.io/v3/33036dd577fa4493a03d2d3ab1098676"
+              },
+              {
+                "Name": "CONTRACT_ADDRESS",
+                "Value": "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85"
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/aws-cdk/assets:41f96b9e4b1cd50f9e04c619357ea3656e41a12ae8fa195e339c75d12605af72"
+                ]
+              ]
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "EtherScanTaskDefinitionEtherScanContainerLogGroupEE4541A3"
+                },
+                "awslogs-stream-prefix": "EtherScanEthereumContractEvents",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "mode": "non-blocking"
+              }
+            },
+            "Name": "EtherScanContainer"
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "EtherScanTaskDefinitionExecutionRoleACD87BDD",
+            "Arn"
+          ]
+        },
+        "Family": "appEtherScanTaskDefinition008E4C14",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "EtherScanTaskDefinitionTaskRoleE2985F19",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanTaskDefinition/Resource"
+      }
+    },
+    "EtherScanTaskDefinitionEtherScanContainerLogGroupEE4541A3": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanTaskDefinition/EtherScanContainer/LogGroup/Resource"
+      }
+    },
+    "EtherScanTaskDefinitionExecutionRoleACD87BDD": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanTaskDefinition/ExecutionRole/Resource"
+      }
+    },
+    "EtherScanTaskDefinitionExecutionRoleDefaultPolicy3B360581": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":repository/aws-cdk/assets"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EtherScanTaskDefinitionEtherScanContainerLogGroupEE4541A3",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "EtherScanTaskDefinitionExecutionRoleDefaultPolicy3B360581",
+        "Roles": [
+          {
+            "Ref": "EtherScanTaskDefinitionExecutionRoleACD87BDD"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanTaskDefinition/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "EtherScanServiceA034898D": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "EtherScanServiceSecurityGroupF577D58D",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet1Subnet1E5C3FAC"
+              },
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet2Subnet2B777372"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "EtherScanTaskDefinition2CAB59E0"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanService/Service"
+      }
+    },
+    "EtherScanServiceSecurityGroupF577D58D": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "app/EtherScanService/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EtherScanService/SecurityGroup/Resource"
+      }
+    },
+    "MutantApeYachtClubTaskDefinitionTaskRoleD2685A74": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubTaskDefinition/TaskRole/Resource"
+      }
+    },
+    "MutantApeYachtClubTaskDefinitionTaskRoleDefaultPolicyA04F9A78": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EventBus7B8748AA",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "MutantApeYachtClubTaskDefinitionTaskRoleDefaultPolicyA04F9A78",
+        "Roles": [
+          {
+            "Ref": "MutantApeYachtClubTaskDefinitionTaskRoleD2685A74"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubTaskDefinition/TaskRole/DefaultPolicy/Resource"
+      }
+    },
+    "MutantApeYachtClubTaskDefinitionC998987D": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "NODE_URL",
+                "Value": "https://mainnet.infura.io/v3/33036dd577fa4493a03d2d3ab1098676"
+              },
+              {
+                "Name": "CONTRACT_ADDRESS",
+                "Value": "0x60E4d786628Fea6478F785A6d7e704777c86a7c6"
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/aws-cdk/assets:41f96b9e4b1cd50f9e04c619357ea3656e41a12ae8fa195e339c75d12605af72"
+                ]
+              ]
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "MutantApeYachtClubTaskDefinitionMutantApeYachtClubContainerLogGroupB5C4CE68"
+                },
+                "awslogs-stream-prefix": "MutantApeYachtClubEthereumContractEvents",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "mode": "non-blocking"
+              }
+            },
+            "Name": "MutantApeYachtClubContainer"
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "MutantApeYachtClubTaskDefinitionExecutionRole7BC2D071",
+            "Arn"
+          ]
+        },
+        "Family": "appMutantApeYachtClubTaskDefinition07DA34C0",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "MutantApeYachtClubTaskDefinitionTaskRoleD2685A74",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubTaskDefinition/Resource"
+      }
+    },
+    "MutantApeYachtClubTaskDefinitionMutantApeYachtClubContainerLogGroupB5C4CE68": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubTaskDefinition/MutantApeYachtClubContainer/LogGroup/Resource"
+      }
+    },
+    "MutantApeYachtClubTaskDefinitionExecutionRole7BC2D071": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubTaskDefinition/ExecutionRole/Resource"
+      }
+    },
+    "MutantApeYachtClubTaskDefinitionExecutionRoleDefaultPolicy1305379F": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":repository/aws-cdk/assets"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "MutantApeYachtClubTaskDefinitionMutantApeYachtClubContainerLogGroupB5C4CE68",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "MutantApeYachtClubTaskDefinitionExecutionRoleDefaultPolicy1305379F",
+        "Roles": [
+          {
+            "Ref": "MutantApeYachtClubTaskDefinitionExecutionRole7BC2D071"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubTaskDefinition/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "MutantApeYachtClubService4DB12F60": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "MutantApeYachtClubServiceSecurityGroup28A302A9",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet1Subnet1E5C3FAC"
+              },
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet2Subnet2B777372"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "MutantApeYachtClubTaskDefinitionC998987D"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubService/Service"
+      }
+    },
+    "MutantApeYachtClubServiceSecurityGroup28A302A9": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "app/MutantApeYachtClubService/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/MutantApeYachtClubService/SecurityGroup/Resource"
       }
     },
     "CDKMetadata": {

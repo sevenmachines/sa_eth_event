@@ -4,7 +4,6 @@ from aws_cdk import (
         aws_ecs as ecs,
         aws_sns as sns,
         aws_logs as logs,
-        aws_ecs_patterns as ecs_patterns,
         aws_events as events,
         aws_events_targets as events_targets,
         aws_iam as iam,
@@ -69,7 +68,7 @@ class EthereumContractEventsStack(core.Stack):
                 cpu=256
             )
             container = fargate_task_definition.add_container("{}Container".format(contract_name),
-            image=ecs.ContainerImage.from_asset('docker-ethereum-event-notifier'),
+            image=ecs.ContainerImage.from_asset('docker-ethereum-contract-events-relay'),
             environment={# clear text, not for sensitive data
                 "NODE_URL": node_url,
                 "CONTRACT_ADDRESS": contract_address

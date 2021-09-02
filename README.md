@@ -1,5 +1,14 @@
 
-# Welcome to your CDK Python project!
+# Relaying contract events into AWS using Fargate and EventBridge
+
+![Architecture](architecture.jpg)
+  
+
+## Introduction
+
+## Walkthrough
+
+## Appendix
 
 This is a blank project for Python development with CDK.
 
