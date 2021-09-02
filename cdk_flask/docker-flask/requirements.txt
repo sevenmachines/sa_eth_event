@@ -12,3 +12,5 @@ sqlalchemy_utils
 flask-s3
 requests
 requests
+boto3
+boto3
