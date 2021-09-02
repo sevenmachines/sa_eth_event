@@ -1,5 +1,5 @@
 
-# Relaying Ethereum contract events into AWS using Fargate and EventBridge
+# Relaying Ethereum contract events into AWS using AWS Fargate and Amazon EventBridge
 
 This post demonstrates how to relay events on contracts in the Ethereum public blockchain into the AWS environment. This enables traditional applications in the cloud to integrate closely with the public blockchain and react to changes. The solution is fully serverless, utilising AWS Fargate services to monitor each contract, and AWS Eventbridge as the event bus to distribute events to interested services and applications within the AWS cloud. The solution is deployed with the AWS Cloud Development Kit (AWS CDK).
 
