@@ -1,0 +1,1245 @@
+{
+  "Resources": {
+    "FargateFlaskVPCB449F3CE": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/Resource"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet1SubnetC9898147": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/18",
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet1/Subnet"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet1RouteTable75270A3C": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet1/RouteTable"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet1RouteTableAssociationB83DB4CC": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPublicSubnet1RouteTable75270A3C"
+        },
+        "SubnetId": {
+          "Ref": "FargateFlaskVPCPublicSubnet1SubnetC9898147"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet1/RouteTableAssociation"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet1DefaultRoute82721DBF": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPublicSubnet1RouteTable75270A3C"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "FargateFlaskVPCIGWFF5681B6"
+        }
+      },
+      "DependsOn": [
+        "FargateFlaskVPCVPCGW20E8223F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet1EIP925E2A41": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet1/EIP"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet1NATGateway1CDDBECA": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "FargateFlaskVPCPublicSubnet1SubnetC9898147"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "FargateFlaskVPCPublicSubnet1EIP925E2A41",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet1/NATGateway"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet2SubnetF20A2324": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.64.0/18",
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          },
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet2/Subnet"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet2RouteTable511800B4": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet2/RouteTable"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet2RouteTableAssociation4B6C7CCB": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPublicSubnet2RouteTable511800B4"
+        },
+        "SubnetId": {
+          "Ref": "FargateFlaskVPCPublicSubnet2SubnetF20A2324"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet2/RouteTableAssociation"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet2DefaultRoute04D2D239": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPublicSubnet2RouteTable511800B4"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "FargateFlaskVPCIGWFF5681B6"
+        }
+      },
+      "DependsOn": [
+        "FargateFlaskVPCVPCGW20E8223F"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet2/DefaultRoute"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet2EIP65FADDFE": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet2/EIP"
+      }
+    },
+    "FargateFlaskVPCPublicSubnet2NATGateway3D278A02": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "FargateFlaskVPCPublicSubnet2SubnetF20A2324"
+        },
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "FargateFlaskVPCPublicSubnet2EIP65FADDFE",
+            "AllocationId"
+          ]
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PublicSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PublicSubnet2/NATGateway"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet1Subnet1E5C3FAC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.128.0/18",
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet1/Subnet"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet1RouteTableE6D5CBBE": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet1/RouteTable"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet1RouteTableAssociation1AFABD58": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPrivateSubnet1RouteTableE6D5CBBE"
+        },
+        "SubnetId": {
+          "Ref": "FargateFlaskVPCPrivateSubnet1Subnet1E5C3FAC"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet1/RouteTableAssociation"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet1DefaultRoute0E945A73": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPrivateSubnet1RouteTableE6D5CBBE"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "FargateFlaskVPCPublicSubnet1NATGateway1CDDBECA"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet1/DefaultRoute"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet2Subnet2B777372": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.192.0/18",
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": ""
+            }
+          ]
+        },
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          },
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet2/Subnet"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet2RouteTable25300098": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC/PrivateSubnet2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet2/RouteTable"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet2RouteTableAssociation6143F9EA": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPrivateSubnet2RouteTable25300098"
+        },
+        "SubnetId": {
+          "Ref": "FargateFlaskVPCPrivateSubnet2Subnet2B777372"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet2/RouteTableAssociation"
+      }
+    },
+    "FargateFlaskVPCPrivateSubnet2DefaultRoute0280F755": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "FargateFlaskVPCPrivateSubnet2RouteTable25300098"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "FargateFlaskVPCPublicSubnet2NATGateway3D278A02"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/PrivateSubnet2/DefaultRoute"
+      }
+    },
+    "FargateFlaskVPCIGWFF5681B6": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "app/FargateFlaskVPC"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/IGW"
+      }
+    },
+    "FargateFlaskVPCVPCGW20E8223F": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        },
+        "InternetGatewayId": {
+          "Ref": "FargateFlaskVPCIGWFF5681B6"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/FargateFlaskVPC/VPCGW"
+      }
+    },
+    "ClusterEB0386A7": {
+      "Type": "AWS::ECS::Cluster",
+      "Metadata": {
+        "aws:cdk:path": "app/Cluster/Resource"
+      }
+    },
+    "EventBus7B8748AA": {
+      "Type": "AWS::Events::EventBus",
+      "Properties": {
+        "Name": "ethereum_contract_events"
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EventBus/Resource"
+      }
+    },
+    "ruleF2C1DCDC": {
+      "Type": "AWS::Events::Rule",
+      "Properties": {
+        "EventBusName": {
+          "Ref": "EventBus7B8748AA"
+        },
+        "EventPattern": {
+          "account": [
+            {
+              "Ref": "AWS::AccountId"
+            }
+          ]
+        },
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Ref": "TopicBFC7AF6E"
+            },
+            "Id": "Target0"
+          },
+          {
+            "Arn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":logs:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":log-group:",
+                  {
+                    "Ref": "EthereumContractEventsLogGroupF94B6444"
+                  }
+                ]
+              ]
+            },
+            "Id": "Target1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/rule/Resource"
+      }
+    },
+    "TopicBFC7AF6E": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "Ethereum contract events topic",
+        "TopicName": "EthereumContractEventsTopic"
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/Topic/Resource"
+      }
+    },
+    "TopicPolicyA1747468": {
+      "Type": "AWS::SNS::TopicPolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sns:Publish",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com"
+              },
+              "Resource": {
+                "Ref": "TopicBFC7AF6E"
+              },
+              "Sid": "0"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Topics": [
+          {
+            "Ref": "TopicBFC7AF6E"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/Topic/Policy/Resource"
+      }
+    },
+    "EthereumContractEventsLogGroupF94B6444": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "EthereumContractEventsLogGroup",
+        "RetentionInDays": 731
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "app/EthereumContractEventsLogGroup/Resource"
+      }
+    },
+    "EventsLogGroupPolicyapprule93FB9D8CCustomResourcePolicy4ECDA7E6": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "logs:PutResourcePolicy",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "logs:DeleteResourcePolicy",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "EventsLogGroupPolicyapprule93FB9D8CCustomResourcePolicy4ECDA7E6",
+        "Roles": [
+          {
+            "Ref": "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/EventsLogGroupPolicyapprule93FB9D8C/CustomResourcePolicy/Resource"
+      }
+    },
+    "EventsLogGroupPolicyapprule93FB9D8CE7317AF0": {
+      "Type": "Custom::CloudwatchLogResourcePolicy",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd22872D164C4C",
+            "Arn"
+          ]
+        },
+        "Create": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"service\":\"CloudWatchLogs\",\"action\":\"putResourcePolicy\",\"parameters\":{\"policyName\":\"appEventsLogGroupPolicyapprule93FB9D8C75E2B4FC\",\"policyDocument\":\"{\\\"Statement\\\":[{\\\"Action\\\":[\\\"logs:PutLogEvents\\\",\\\"logs:CreateLogStream\\\"],\\\"Effect\\\":\\\"Allow\\\",\\\"Principal\\\":{\\\"Service\\\":\\\"events.amazonaws.com\\\"},\\\"Resource\\\":\\\"",
+              {
+                "Fn::GetAtt": [
+                  "EthereumContractEventsLogGroupF94B6444",
+                  "Arn"
+                ]
+              },
+              "\\\"}],\\\"Version\\\":\\\"2012-10-17\\\"}\"},\"physicalResourceId\":{\"id\":\"EventsLogGroupPolicyapprule93FB9D8C\"}}"
+            ]
+          ]
+        },
+        "Update": {
+          "Fn::Join": [
+            "",
+            [
+              "{\"service\":\"CloudWatchLogs\",\"action\":\"putResourcePolicy\",\"parameters\":{\"policyName\":\"appEventsLogGroupPolicyapprule93FB9D8C75E2B4FC\",\"policyDocument\":\"{\\\"Statement\\\":[{\\\"Action\\\":[\\\"logs:PutLogEvents\\\",\\\"logs:CreateLogStream\\\"],\\\"Effect\\\":\\\"Allow\\\",\\\"Principal\\\":{\\\"Service\\\":\\\"events.amazonaws.com\\\"},\\\"Resource\\\":\\\"",
+              {
+                "Fn::GetAtt": [
+                  "EthereumContractEventsLogGroupF94B6444",
+                  "Arn"
+                ]
+              },
+              "\\\"}],\\\"Version\\\":\\\"2012-10-17\\\"}\"},\"physicalResourceId\":{\"id\":\"EventsLogGroupPolicyapprule93FB9D8C\"}}"
+            ]
+          ]
+        },
+        "Delete": "{\"service\":\"CloudWatchLogs\",\"action\":\"deleteResourcePolicy\",\"parameters\":{\"policyName\":\"appEventsLogGroupPolicyapprule93FB9D8C75E2B4FC\"},\"ignoreErrorCodesMatching\":\"400\"}",
+        "InstallLatestAwsSdk": true
+      },
+      "DependsOn": [
+        "EventsLogGroupPolicyapprule93FB9D8CCustomResourcePolicy4ECDA7E6"
+      ],
+      "UpdateReplacePolicy": "Delete",
+      "DeletionPolicy": "Delete",
+      "Metadata": {
+        "aws:cdk:path": "app/EventsLogGroupPolicyapprule93FB9D8C/Resource/Default"
+      }
+    },
+    "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+              ]
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/AWS679f53fac002430cb0da5b7982bd2287/ServiceRole/Resource"
+      }
+    },
+    "AWS679f53fac002430cb0da5b7982bd22872D164C4C": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "AssetParametersf3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797S3BucketBEE108A9"
+          },
+          "S3Key": {
+            "Fn::Join": [
+              "",
+              [
+                {
+                  "Fn::Select": [
+                    0,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersf3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797S3VersionKeyA877E3C9"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "Fn::Select": [
+                    1,
+                    {
+                      "Fn::Split": [
+                        "||",
+                        {
+                          "Ref": "AssetParametersf3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797S3VersionKeyA877E3C9"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2",
+            "Arn"
+          ]
+        },
+        "Handler": "index.handler",
+        "Runtime": "nodejs12.x",
+        "Timeout": 120
+      },
+      "DependsOn": [
+        "AWS679f53fac002430cb0da5b7982bd2287ServiceRoleC1EA0FF2"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "app/AWS679f53fac002430cb0da5b7982bd2287/Resource",
+        "aws:asset:path": "asset.f3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797",
+        "aws:asset:property": "Code"
+      }
+    },
+    "CryptoPunksTaskDefinitionTaskRole26BA4A02": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksTaskDefinition/TaskRole/Resource"
+      }
+    },
+    "CryptoPunksTaskDefinitionTaskRoleDefaultPolicy840BA22A": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "events:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "EventBus7B8748AA",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "CryptoPunksTaskDefinitionTaskRoleDefaultPolicy840BA22A",
+        "Roles": [
+          {
+            "Ref": "CryptoPunksTaskDefinitionTaskRole26BA4A02"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksTaskDefinition/TaskRole/DefaultPolicy/Resource"
+      }
+    },
+    "CryptoPunksTaskDefinition4ADCBC82": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "NODE_URL",
+                "Value": "https://mainnet.infura.io/v3/33036dd577fa4493a03d2d3ab1098676"
+              },
+              {
+                "Name": "CONTRACT_ADDRESS",
+                "Value": "0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB"
+              }
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/aws-cdk/assets:f5e7b5a9b4c61db2841cdcdfe5795403ce2d33eda06b8782f1dc864e65f1781f"
+                ]
+              ]
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "CryptoPunksTaskDefinitionCryptoPunksContainerLogGroup54D51243"
+                },
+                "awslogs-stream-prefix": "CryptoPunksEthereumContractEvents",
+                "awslogs-region": {
+                  "Ref": "AWS::Region"
+                },
+                "mode": "non-blocking"
+              }
+            },
+            "Name": "CryptoPunksContainer"
+          }
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "CryptoPunksTaskDefinitionExecutionRoleE09113C4",
+            "Arn"
+          ]
+        },
+        "Family": "appCryptoPunksTaskDefinition7E3EB4BD",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "CryptoPunksTaskDefinitionTaskRole26BA4A02",
+            "Arn"
+          ]
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksTaskDefinition/Resource"
+      }
+    },
+    "CryptoPunksTaskDefinitionCryptoPunksContainerLogGroup54D51243": {
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksTaskDefinition/CryptoPunksContainer/LogGroup/Resource"
+      }
+    },
+    "CryptoPunksTaskDefinitionExecutionRoleE09113C4": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksTaskDefinition/ExecutionRole/Resource"
+      }
+    },
+    "CryptoPunksTaskDefinitionExecutionRoleDefaultPolicyEEB86B7C": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":repository/aws-cdk/assets"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "CryptoPunksTaskDefinitionCryptoPunksContainerLogGroup54D51243",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "CryptoPunksTaskDefinitionExecutionRoleDefaultPolicyEEB86B7C",
+        "Roles": [
+          {
+            "Ref": "CryptoPunksTaskDefinitionExecutionRoleE09113C4"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksTaskDefinition/ExecutionRole/DefaultPolicy/Resource"
+      }
+    },
+    "CryptoPunksService331BAE38": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 1,
+        "EnableECSManagedTags": false,
+        "LaunchType": "FARGATE",
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "CryptoPunksServiceSecurityGroup00378405",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet1Subnet1E5C3FAC"
+              },
+              {
+                "Ref": "FargateFlaskVPCPrivateSubnet2Subnet2B777372"
+              }
+            ]
+          }
+        },
+        "TaskDefinition": {
+          "Ref": "CryptoPunksTaskDefinition4ADCBC82"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksService/Service"
+      }
+    },
+    "CryptoPunksServiceSecurityGroup00378405": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "app/CryptoPunksService/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "VpcId": {
+          "Ref": "FargateFlaskVPCB449F3CE"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CryptoPunksService/SecurityGroup/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/11STU/DMAz9LdyzwJg4cIMNmCYhVHWIu5eZEtbGU+Jsqqr+d5x+rMClfn5+iV9cz/X8dq5vrh7gHGZmf7huDHnUzZbBHFSOgaI3qFYxMFVT+uku+DEEZJEX1hVqRS6wj4aTJAMPFTL6lEhlb9mSa1Vq1aC51c3H0aTaR7ZSWdyV1mzjzmF3eEI5RcZ32JU48RMn7clYSDdfxAk8b7IU3oDXwHiGWmXengROF2+ceBM8CnonQ/bIMoGvCh2rLZroLddrT/HYefhNtApN0M2qlBENTx3gC/gCks1weMJP6+xo8j9DjsE69L+44ewW/cn2Ax+gtDuJKen4nOIyhu61I85jP6YUWxWc6N7paLsx96D7ZiTDri9kn7aqpEIOvFJxeeqIpQbVbg+yGfKfS2RyL9GZ3usIRD/iVlmodDP1GVBOgz/q/C1mkNYn6G6LJNfLaA7ISwgoc/Vj+YmE9ZsKCuyVUtM5HilYJl8neatMt6QzP2ymXHoOfxe3VVnNX+SuF/pe3119B2tnPjq2Feq8jz+94UsuEQMAAA=="
+      },
+      "Metadata": {
+        "aws:cdk:path": "app/CDKMetadata/Default"
+      },
+      "Condition": "CDKMetadataAvailable"
+    }
+  },
+  "Parameters": {
+    "AssetParametersf3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797S3BucketBEE108A9": {
+      "Type": "String",
+      "Description": "S3 bucket for asset \"f3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797\""
+    },
+    "AssetParametersf3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797S3VersionKeyA877E3C9": {
+      "Type": "String",
+      "Description": "S3 key for asset version \"f3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797\""
+    },
+    "AssetParametersf3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797ArtifactHashAAFCA968": {
+      "Type": "String",
+      "Description": "Artifact hash for asset \"f3d3a3cc7f26921b237eff24fc5dd7aef8f0465a1f376b8f7918eb3d4b3e8797\""
+    }
+  },
+  "Conditions": {
+    "CDKMetadataAvailable": {
+      "Fn::Or": [
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "af-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-northeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ap-southeast-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "ca-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "cn-northwest-1"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-central-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-north-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-2"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "eu-west-3"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "me-south-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "sa-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-east-2"
+              ]
+            }
+          ]
+        },
+        {
+          "Fn::Or": [
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-1"
+              ]
+            },
+            {
+              "Fn::Equals": [
+                {
+                  "Ref": "AWS::Region"
+                },
+                "us-west-2"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

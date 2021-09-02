@@ -1,0 +1,4 @@
+web3
+boto3
+requests
+python-json-logger

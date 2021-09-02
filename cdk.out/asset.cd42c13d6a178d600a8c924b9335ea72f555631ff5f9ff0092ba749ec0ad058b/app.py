@@ -5,17 +5,40 @@ import os
 import requests
 from web3 import Web3
 import asyncio
+import logging
+from pythonjsonlogger import jsonlogger
 
-class EthereumNotifier():
+class EthereumContractNotifier():
 
-    def __init__(self, node_url, contract_address):
+    def __init__(self,
+                 node_url,
+                 contract_address,
+                 poll_interval=10):
         self.contract_address = contract_address
         self.node_url = node_url
+        self.poll_interval = poll_interval
+        
+        self._setup_logging()
         self._setup_connection()
         self._setup_contract()
         self._setup_filters()
         self._setup_event_bus()
-   
+        
+        self.logger.info('__init__: contract_address:{} node_url:{} is_connected:{} event_names:{}'
+              .format(self.contract_address,
+                      self.node_url,
+                      self.w3.isConnected(),
+                      list(self.event_filters.keys())
+                ))
+        
+    def _setup_logging(self):
+        logging.basicConfig(level=logging.INFO)
+        logHandler = logging.StreamHandler()
+        formatter = jsonlogger.JsonFormatter()
+        logHandler.setFormatter(formatter)
+        self.logger = logging.getLogger()
+        self.logger.addHandler(logHandler)
+
     def _setup_connection(self):
         self.w3 = Web3(Web3.HTTPProvider(self.node_url))
 
@@ -50,17 +73,18 @@ class EthereumNotifier():
             ]
         )
         # No error handling
-        print(response)
+        logging.info(response)
 
     async def gather_event(self, event_filter_name, event_filter):
-        print(event_filter_name)
+        logging.debug('gather_event: event_filter_name:{}'.format(event_filter_name))
         try:
             for event in event_filter.get_new_entries():
                 self.handle_event(event)
         except ValueError as e:
-            print(e)
+            logging.error(e)
 
     async def gather_events(self, poll_interval):
+        logging.debug('gather_events: poll_interval:{}'.format(poll_interval))
         while True:
             coroutines = [self.gather_event(event_filter_name, event_filter)
                       for event_filter_name, event_filter in self.event_filters.items()]
@@ -70,11 +94,13 @@ class EthereumNotifier():
     def run(self):
         loop = asyncio.get_event_loop()
         try:
-            loop.run_until_complete(self.gather_events(poll_interval=10))
+            loop.run_until_complete(self.gather_events(poll_interval=self.poll_interval))
         finally:
             loop.close()
 
 if __name__ == "__main__":
-    notifier = EthereumNotifier(node_url=os.environ.get('NODE_URL'),
-                                contract_address=os.environ.get('CONTRACT_ADDRESS'))
+    notifier = EthereumContractNotifier(
+        node_url=os.environ.get('NODE_URL'),
+        contract_address=os.environ.get('CONTRACT_ADDRESS'),
+        poll_interval=os.environ.get('POLL_INTERVAL', 10))
     notifier.run()
