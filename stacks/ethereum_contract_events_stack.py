@@ -11,16 +11,15 @@ from aws_cdk import (
 
 class EthereumContractEventsStack(core.Stack):
     """
-    A class used to represent an initialise an AWS Cloudformation stack
-
+    A class used to represent and initialise the AWS Cloudformation stack using CDK
     """
     
     def __init__(self, scope: core.Construct, id: str, node_url: str, contract_addresses: dict, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         vpc = self._create_vpc()
         ecs_cluster = self._create_ecs_cluster(vpc)
-        event_bus = self._create_event_bus(name='ethereum_contract_events', source='ethereum')
-        ecs_services = self._create_service(ecs_cluster, node_url, contract_addresses)
+        event_bus = self._create_event_bus(name='ethereum_contract_events')
+        ecs_services = self._create_services(ecs_cluster, node_url, contract_addresses)
         self._create_permissions(ecs_services, event_bus)
 
 
@@ -43,27 +42,29 @@ class EthereumContractEventsStack(core.Stack):
         vpc = ec2.Vpc(self, 'FargateFlaskVPC', cidr='10.0.0.0/16')
         return vpc
 
-    def _create_service(self, cluster, node_url, contract_addresses):
-        """Creates a serverless Fargate service for ECS from a local dockerfile.
-        The service is fronted by an application load balancer.
+    def _create_services(self, cluster, node_url, contract_addresses):
+        """Creates a serverless Fargate service for ECS from a local dockerfile
+        for each ethereum contract address
 
         Parameters
         ----------
         ecs_cluster : aws-cdk.aws_ecs.Cluster
             The ECS cluster to run the service
-        s3_bucket : aws-cdk.aws_s3.Bucket
-            An S3 bucket for container use
-        db_cluster : aws-cdk.aws_rds.DatabaseCluster
-            An Aurora database for container use
+        node_url : string
+            The URL of an ethereum node
+        contract_addresses : dict
+            A dictionary of contract names to contract addresses
     
         Returns
         -------
-        aws-cdk.ecs_patterns.ApplicationLoadBalancedFargateService
-            A serverless fargate fronted by an application load balancer
+        list<aws-cdk.ecs.FargateService>
+            A list of serverless fargate services
         """
         services = []
         for contract_name, contract_address in contract_addresses.items():
-            fargate_task_definition = ecs.FargateTaskDefinition(self, "{}TaskDefinition".format(contract_name),
+            fargate_task_definition = ecs.FargateTaskDefinition(
+                self,
+                "{}TaskDefinition".format(contract_name),
                 memory_limit_mib=512,
                 cpu=256
             )
@@ -99,16 +100,20 @@ class EthereumContractEventsStack(core.Stack):
         ecs_cluster = ecs.Cluster(self, 'Cluster', vpc=vpc)
         return ecs_cluster
 
-    def _create_event_bus(self, name, source):
-        """Creates an S3 bucket
+    def _create_event_bus(self, name):
+        """Creates an event bus for ethereum contract events,
+        the corresponding rule, and example SNS topic and cloudwatch 
+        targets
 
         Parameters
         ----------
-    
+        name: string
+            The name of the event bus
+        
         Returns
         -------
-        aws-cdk.aws_s3.Bucket
-            A private S3 bucket
+        aws-cdk.aws_events.EventBus
+            An AWS EventBriddge event bus
         """
         event_bus = events.EventBus(self, "EventBus", event_bus_name=name)
         rule = events.Rule(self, "rule", event_bus=event_bus,
@@ -126,22 +131,21 @@ class EthereumContractEventsStack(core.Stack):
 
 
     def _create_permissions(self, ecs_services, event_bus):
-        """Enables the fargate service in the ECS cluster the permissions
-        to store data in an s3 bucket, and access the database cluster
+        """Enables the fargate service to carry out all actions on 
+        the dedicated eventbridge event bus
 
         Parameters
         ----------
-        aws-cdk.ecs_patterns.ApplicationLoadBalancedFargateService
-            A serverless fargate fronted by an application load balancer
-        s3_bucket : aws-cdk.aws_s3.Bucket
-            An S3 bucket for container use
-        db_cluster : aws-cdk.aws_rds.DatabaseCluster
-            An Aurora database for container use
+        ecs_services: list<aws-cdk.ecs.FargateService>
+            A list of serverless fargate services
+        event_bus: aws-cdk.aws_events.EventBus
+            An AWS EventBriddge event bus
     
         Returns
         -------
         """
         for ecs_service in ecs_services:
-            ecs_service.task_definition.add_to_task_role_policy(iam.PolicyStatement(actions=["events:*"],
-                                                                                    resources=[event_bus.event_bus_arn]))
+            ecs_service.task_definition.add_to_task_role_policy(
+                iam.PolicyStatement(actions=["events:*"],
+                resources=[event_bus.event_bus_arn]))
     
