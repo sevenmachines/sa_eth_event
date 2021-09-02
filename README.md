@@ -1,10 +1,19 @@
 
-# Relaying contract events into AWS using Fargate and EventBridge
+# Relaying Ethereum contract events into AWS using Fargate and EventBridge
 
 ![Architecture](architecture.jpg)
   
 
 ## Introduction
+
+The CDK application app.py will create the cloud stack and fargate services to poll
+ethereum contract events. Connection to the ethereum network is made through a 
+Web3 HttpProvider given by the <node_url> variable, with <contract_addresses> for 
+contract names and addresses to be passed to each individual service
+In this demo, the connection is to the Infura node endpoints,
+see https://blog.infura.io/getting-started-with-infura-28e41844cc89/
+Events are monitored for the NFT contracts CryptoPunks, MeeBits,
+and MutantApeYachtClub.
 
 ## Walkthrough
 
