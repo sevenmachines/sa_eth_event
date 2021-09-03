@@ -78,7 +78,7 @@ class EthereumContractNotifier():
 
     async def gather_events(self, poll_interval):
         logging.debug('gather_events: poll_interval:{}'.format(poll_interval))
-        while True:
+        while self.w3.isConnected():
             coroutines = [self.gather_event(event_filter_name, event_filter)
                       for event_filter_name, event_filter in self.event_filters.items()]
             asyncio.gather(*coroutines)

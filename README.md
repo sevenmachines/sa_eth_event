@@ -27,7 +27,7 @@ see https://blog.infura.io/getting-started-with-infura-28e41844cc89/
 Events are monitored for the NFT contracts CryptoPunks, MeeBits,
 and MutantApeYachtClub.
 
-## Understanding the stack
+## Understanding the application
 
 ## Cleaning Up
 
