@@ -5,6 +5,8 @@ import os
 import requests
 from web3 import Web3
 import asyncio
+import logging
+
 
 class EthereumContractNotifier():
 
@@ -31,12 +33,12 @@ class EthereumContractNotifier():
         self._setup_contract()
         self._setup_filters()
         self._setup_event_bus()
-        
+        logging.basicConfig(format='%(message)s', level=logging.INFO)
         msg_data = {"contract_address": self.contract_address,
                     "node_url": self.node_url,
                     "is_connected": self.w3.isConnected(),
                     "event_names": list(self.event_filters.keys())}
-        print(json.dumps(msg_data))
+        logging.info(json.dumps(msg_data))
 
     def _setup_connection(self):
         """
@@ -89,8 +91,8 @@ class EthereumContractNotifier():
             ]
         )
         # No error handling
-        print(detail)
-        print(response)
+        logging.info(detail)
+        logging.info(response)
 
     async def gather_event(self, event_filter_name, event_filter):
         """
@@ -101,7 +103,7 @@ class EthereumContractNotifier():
             for event in event_filter.get_new_entries():
                 self.handle_event(event)
         except ValueError as e:
-            print(e)
+            logging.error(e)
 
     async def gather_events(self, poll_interval):
         """
