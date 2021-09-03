@@ -69,7 +69,7 @@ class EthereumContractEventsStack(core.Stack):
                 cpu=256
             )
             container = fargate_task_definition.add_container("{}Container".format(contract_name),
-            image=ecs.ContainerImage.from_asset('docker-ethereum-contract-events-relay'),
+            image=ecs.ContainerImage.from_asset('containers/ethereum-contract-events-relay'),
             environment={# clear text, not for sensitive data
                 "NODE_URL": node_url,
                 "CONTRACT_ADDRESS": contract_address
