@@ -1253,7 +1253,7 @@
                               {
                                 "Ref": "AWS::URLSuffix"
                               },
-                              "/aws-cdk/assets:937186b69b8682d63a0896da262443581477b05d668aefac4a9f4a3e51d5b741"
+                              "/aws-cdk/assets:6a0f1b80d4419e2f23f91bc6dbf23ef09206c59b22dca9bf43036b3574df96fc"
                             ]
                           ]
                         },
@@ -1686,7 +1686,7 @@
                               {
                                 "Ref": "AWS::URLSuffix"
                               },
-                              "/aws-cdk/assets:937186b69b8682d63a0896da262443581477b05d668aefac4a9f4a3e51d5b741"
+                              "/aws-cdk/assets:6a0f1b80d4419e2f23f91bc6dbf23ef09206c59b22dca9bf43036b3574df96fc"
                             ]
                           ]
                         },
@@ -2119,7 +2119,7 @@
                               {
                                 "Ref": "AWS::URLSuffix"
                               },
-                              "/aws-cdk/assets:937186b69b8682d63a0896da262443581477b05d668aefac4a9f4a3e51d5b741"
+                              "/aws-cdk/assets:6a0f1b80d4419e2f23f91bc6dbf23ef09206c59b22dca9bf43036b3574df96fc"
                             ]
                           ]
                         },

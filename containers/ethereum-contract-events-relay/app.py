@@ -5,7 +5,6 @@ import os
 import requests
 from web3 import Web3
 import asyncio
-import logging
 
 class EthereumContractNotifier():
 
@@ -28,22 +27,16 @@ class EthereumContractNotifier():
         self.node_url = node_url
         self.poll_interval = poll_interval
         
-        self._setup_logging()
         self._setup_connection()
         self._setup_contract()
         self._setup_filters()
         self._setup_event_bus()
         
-        logging.info('contract_address:{}'.format(self.contract_address))
-        logging.info('node_url:{}'.format(self.node_url))
-        logging.info('is_connected:{}'.format(self.w3.isConnected()))
-        logging.info('event_names:{}'.format(list(self.event_filters.keys())))
-
-    def _setup_logging(self):
-        """
-        Initialise the logging settings
-        """
-        logging.basicConfig(level=logging.INFO)
+        msg_data = {"contract_address": self.contract_address,
+                    "node_url": self.node_url,
+                    "is_connected": self.w3.isConnected(),
+                    "event_names": list(self.event_filters.keys())}
+        print(json.dumps(msg_data))
 
     def _setup_connection(self):
         """
@@ -96,27 +89,25 @@ class EthereumContractNotifier():
             ]
         )
         # No error handling
-        logging.info(detail)
-        logging.info(response)
+        print(detail)
+        print(response)
 
     async def gather_event(self, event_filter_name, event_filter):
         """
         Collect all new events on a contract that pass the event filter and send 
         for handling.
         """
-        logging.debug('gather_event: event_filter_name:{}'.format(event_filter_name))
         try:
             for event in event_filter.get_new_entries():
                 self.handle_event(event)
         except ValueError as e:
-            logging.error(e)
+            print(e)
 
     async def gather_events(self, poll_interval):
         """
         Concurrently poll each contract event type each given poll interval. 
         Only return if the Web3 connection to the provider is lost.
         """
-        logging.debug('gather_events: poll_interval:{}'.format(poll_interval))
         while self.w3.isConnected():
             coroutines = [self.gather_event(event_filter_name, event_filter)
                       for event_filter_name, event_filter in self.event_filters.items()]
